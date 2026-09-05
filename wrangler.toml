@@ -1,5 +1,4 @@
-name = "deployflow"
-pages_build_output_dir = "public"
+name = "deployflow-cf"
 compatibility_date = "2025-07-18"
 
 [[d1_databases]]
