@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -1662,15 +1662,8 @@ async function handleRegister() {
       syncFromBackend().then(function() { showApp(); });
     }, 500);
   } else if (result._network) {
-    // Backend unavailable - fallback to localStorage
-    var users = Store.get('users', {});
-    if (users[email]) { hideLoading(); showToast('该邮箱已注册', 'warn'); switchAuthTab('login'); return; }
-    var name = email.split('@')[0];
-    users[email] = { name: name, email: email, password: btoa(pwd), avatar: null, provider: 'email', createdAt: Date.now() };
-    Store.set('users', users);
-    delete verifyCodes[email];
-    showToast('注册成功（本地模式）！正在登录...', 'success');
-    setTimeout(function() { currentUser = users[email]; Store.set('currentUser', { email: email }); showApp(); }, 500);
+    hideLoading();
+    showToast('网络连接失败，请检查网络后重试', 'error');
   } else {
     showToast(result.error || '注册失败', 'error');
   }
@@ -1701,14 +1694,8 @@ async function handleLogin() {
     showToast('登录成功', 'success');
     syncFromBackend().then(function() { showApp(); });
   } else if (result._network) {
-    // Backend unavailable - fallback to localStorage
-    var users = Store.get('users', {});
-    if (!users[email]) { showToast('账号不存在，请先注册', 'warn'); return; }
-    if (users[email].password !== btoa(pwd)) { showToast('密码错误', 'error'); return; }
-    currentUser = users[email];
-    Store.set('currentUser', { email: email });
-    showToast('登录成功（本地模式）', 'success');
-    showApp();
+    hideLoading();
+    showToast('网络连接失败，请检查网络后重试', 'error');
   } else {
     showToast(result.error || '登录失败', 'error');
   }
@@ -3065,7 +3052,7 @@ function doRealDeploy(name, slug, framework, method, data, deployFiles) {
       source: method === 'git' ? (data && data.repo) : (method === 'template' ? (data && data.template) : null),
       files: fileList,
       fileList: fileList,
-      url: 'local:' + slug,
+      url: window.location.origin + '/deployed/' + slug + '/',
       customDomain: null,
       createdAt: Date.now(),
       lastDeploy: Date.now(),
