@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { handle } from 'hono/cloudflare-pages';
 import { SignJWT, jwtVerify } from 'jose';
 
-const app = new Hono().basePath('/api');
+const app = new Hono();
 const JWT_SECRET = 'deployflow_secret_key_2026';
 const secretKey = new TextEncoder().encode(JWT_SECRET);
 
