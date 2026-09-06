@@ -1,0 +1,8 @@
+{
+  "name": "deployflow",
+  "version": "1.0.0",
+  "dependencies": {
+    "hono": "^4.13.7",
+    "jose": "^5.10.0"
+  }
+}
